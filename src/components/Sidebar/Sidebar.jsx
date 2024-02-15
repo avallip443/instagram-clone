@@ -1,12 +1,20 @@
-import { Box, Flex, Link } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Link, Tooltip } from "@chakra-ui/react";
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { InstagramLogo, InstagramMobileLogo } from "../../assets/constants";
+import {
+  CreatePostLogo,
+  InstagramLogo,
+  InstagramMobileLogo,
+  NotificationsLogo,
+  SearchLogo,
+} from "../../assets/constants";
+import { AiFillHome } from "react-icons/ai";
+import { TbLogout2 } from "react-icons/tb";
 
 const Sidebar = () => {
   const sidebarItems = [
     {
-      icon: <aiFillHome size={25} />,
+      icon: <AiFillHome size={25} />,
       text: "Home",
       link: "/",
     },
@@ -23,7 +31,7 @@ const Sidebar = () => {
       text: "Create",
     },
     {
-      icon: <Avatar size={'sm'} name='John Doe' src='/profilepic.png' />,
+      icon: <Avatar size={"sm"} name="John Doe" src="/profilepic.png" />,
       text: "Profile",
       link: "/asaprogrammerc",
     },
@@ -66,6 +74,60 @@ const Sidebar = () => {
         >
           <InstagramMobileLogo />
         </Link>
+        <Flex direction={"column"} gap={5} cursor={"pointer"}>
+          {sidebarItems.map((item, index) => (
+            <Tooltip
+              key={index}
+              hasArrow
+              label={item.text}
+              placement="right"
+              m1={1}
+              openDelay={500}
+              display={{ base: "block", md: "none" }}
+            >
+              <Link
+                display={"flex"}
+                to={item.link || null}
+                as={RouterLink}
+                alignItems={"center"}
+                gap={4}
+                _hover={{ bg: "whiteAlpha.400" }}
+                borderRadius={6}
+                p={2}
+                w={{ base: 10, md: "full" }}
+                justifyContent={{ base: "center", md: "flex-start" }}
+              >
+                {item.icon}
+                <Box display={{ base: "none", md: "block" }}>{item.text}</Box>
+              </Link>
+            </Tooltip>
+          ))}
+        </Flex>
+        <Tooltip
+          hasArrow
+          label={"Logout"}
+          placement="right"
+          m1={1}
+          openDelay={500}
+          display={{ base: "block", md: "none" }}
+        >
+          <Link
+            display={"flex"}
+            to={"/auth"}
+            as={RouterLink}
+            alignItems={"center"}
+            gap={4}
+            _hover={{ bg: "whiteAlpha.400" }}
+            borderRadius={6}
+            p={2}
+            w={{ base: 10, md: "full" }}
+            mt={'auto'}
+            justifyContent={{ base: "center", md: "flex-start" }}
+          >
+            <TbLogout2 size={25} />
+            <Box display={{ base: "none", md: "block" }}>Logout</Box>
+          </Link>
+        </Tooltip>
       </Flex>
     </Box>
   );

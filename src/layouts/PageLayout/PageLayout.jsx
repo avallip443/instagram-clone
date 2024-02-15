@@ -4,7 +4,10 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { useLocation } from "react-router-dom";
 
 {
-  /* child either homepage content or authpage content*/
+  /* 
+    child either homepage content or authpage content
+    uses sidebar only once in PageLayout to wrap the children with it instead of adding one to every page except the AuthPage
+  */
 }
 const PageLayout = ({ children }) => {
   const { pathname } = useLocation();

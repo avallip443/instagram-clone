@@ -18,7 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // authentication system stores users login (independent from users stored in firestore)
-const auth = getAuth(app); 
+const auth = getAuth(app);
 
 // database stores information about users and posts
 // user info includes: username, id, email, name, profile pic, followers/following, posts

@@ -1,6 +1,14 @@
 import { useState } from "react";
-import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import useSignupWithEmailAndPassword from "../../hooks/useSignupWithEmailAndPassword";
 
 const Signup = () => {
   const [inputs, setInputs] = useState({
@@ -10,6 +18,7 @@ const Signup = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const { loading, error, signup } = useSignupWithEmailAndPassword();
 
   return (
     <>
@@ -56,7 +65,22 @@ const Signup = () => {
           </Button>
         </InputRightElement>
       </InputGroup>
-      <Button size={"sm"} w={"full"} fontSize={14} colorScheme="blue">
+
+      {error && (
+        <Alert status="error" borderRadius={4} fontSize={13} p={2}>
+          <AlertIcon fontSize={12} />
+          {error.message}
+        </Alert>
+      )}
+
+      <Button
+        size={"sm"}
+        w={"full"}
+        fontSize={14}
+        colorScheme="blue"
+        isLoading={loading}
+        onClick={() => signup(inputs)}
+      >
         Sign up
       </Button>
     </>

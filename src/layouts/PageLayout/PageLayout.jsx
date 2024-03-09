@@ -1,8 +1,9 @@
+import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { auth } from "../../firebase/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useLocation } from "react-router-dom";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 
 {
   /* 
@@ -13,10 +14,15 @@ import { Box, Flex } from "@chakra-ui/react";
 const PageLayout = ({ children }) => {
   const { pathname } = useLocation();
   /* use null if not authenticated  */
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const canRenderSidebar = pathname !== "/auth" && user;
+  const canRenderNavbar = !user && !loading && pathname !== "/auth";
+
+  const checkUserIsAuth = !user && loading;
+  if (checkUserIsAuth) return <PageLayoutSpinner />;
+
   return (
-    <Flex>
+    <Flex flexDirection={canRenderNavbar ? "column" : "row"}>
       {/* left side bar */}
       {/* displays sidebar it not auth page */}
       {canRenderSidebar ? (
@@ -24,9 +30,14 @@ const PageLayout = ({ children }) => {
           <Sidebar />
         </Box>
       ) : null}
-
+      {/* Navbar for unauthenticated users */}
+      {canRenderNavbar ? <Navbar /> : null}
       {/* page on right */}
-      <Box flex={1} w={{ base: "calc(100% - 70px)", md: "calc(100% - 240px)" }}>
+      <Box
+        flex={1}
+        w={{ base: "calc(100% - 70px)", md: "calc(100% - 240px)" }}
+        mx={"auto"}
+      >
         {children}
       </Box>
     </Flex>
@@ -34,3 +45,16 @@ const PageLayout = ({ children }) => {
 };
 
 export default PageLayout;
+
+const PageLayoutSpinner = () => {
+  return (
+    <Flex
+      flexDirection={"column"}
+      h={"100vh"}
+      justifyContent={"center"}
+      alignItems={"center"}
+    >
+      <Spinner size={"xl"} />
+    </Flex>
+  );
+};

@@ -1,3 +1,5 @@
+import useAuthStore from "../../store/authStore";
+import useUserProfileStore from "../../store/userProfileStore";
 import {
   Avatar,
   AvatarGroup,
@@ -8,6 +10,12 @@ import {
 } from "@chakra-ui/react";
 
 const ProfileHeader = () => {
+  const { userProfile } = useUserProfileStore();
+  const authUser = useAuthStore((state) => state.user);
+  const visitingOwnProfileAndAuth =
+    authUser && authUser.username === userProfile.username;
+  const visitingAnotherProfileAndAuth = authUser && authUser.username !== userProfile.username;
+
   return (
     <Flex
       direction={{ base: "column", sm: "row" }}
@@ -20,11 +28,7 @@ const ProfileHeader = () => {
         alignSelf={"flex-start"}
         mx={"auto"}
       >
-        <Avatar
-          src="/profilepic.png"
-          name="test_profile"
-          alt="test_profile logo"
-        ></Avatar>
+        <Avatar src={userProfile.profilePicURL} alt="user profile pic"></Avatar>
       </AvatarGroup>
       <VStack alignItems={"start"} flex={1} gap={2} mx={"auto"}>
         <Flex
@@ -34,41 +38,65 @@ const ProfileHeader = () => {
           w={"full"}
           gap={4}
         >
-            {/* change md font size to lg or md */}
-          <Text fontSize={{ base: "sm", md: "md" }}>test_profile</Text>
-          <Flex justifyContent={"center"} alignItems={"center"} gap={4}>
-            <Button
-              size={{ base: "xs", md: "sm" }}
-              bg={"white"}
-              color={"black"}
-              _hover={{ bg: "whiteAlpha.800" }}
-            >
-              Edit Profile
-            </Button>
-          </Flex>
+          {/* change md font size to lg or md */}
+          <Text fontSize={{ base: "sm", md: "md" }}>
+            {userProfile.username}
+          </Text>
+          {visitingOwnProfileAndAuth && (
+            <Flex justifyContent={"center"} alignItems={"center"} gap={4}>
+              <Button
+                size={{ base: "xs", md: "sm" }}
+                bg={"white"}
+                color={"black"}
+                _hover={{ bg: "whiteAlpha.500" }}
+              >
+                Edit Profile
+              </Button>
+            </Flex>
+          )}
+          {visitingAnotherProfileAndAuth && (
+            <Flex justifyContent={"center"} alignItems={"center"} gap={4}>
+              <Button
+                size={{ base: "xs", md: "sm" }}
+                bg={"blue.500"}
+                color={"white"}
+                _hover={{ bg: "blue.600" }}
+              >
+                Follow
+              </Button>
+            </Flex>
+          )}
         </Flex>
 
         <Flex alignItems={"center"} gap={{ base: 2, sm: 4 }}>
-          <Text fontSize={{base:'xs', md:'sm'}}>
-            <Text as="span" fontWeight={"bold"} mr={1}>4</Text>
+          <Text fontSize={{ base: "xs", md: "sm" }}>
+            <Text as="span" fontWeight={"bold"} mr={1}>
+              {userProfile.posts.length}
+            </Text>
             Posts
           </Text>
 
-          <Text fontSize={{base:'xs', md:'sm'}}>
-            <Text as="span" fontWeight={"bold"} mr={1}>149</Text>
+          <Text fontSize={{ base: "xs", md: "sm" }}>
+            <Text as="span" fontWeight={"bold"} mr={1}>
+              {userProfile.followers.length}
+            </Text>
             Followers
           </Text>
 
-          <Text fontSize={{base:'xs', md:'sm'}}>
-            <Text as="span" fontWeight={"bold"} mr={1}>203</Text>
+          <Text fontSize={{ base: "xs", md: "sm" }}>
+            <Text as="span" fontWeight={"bold"} mr={1}>
+              {userProfile.following.length}
+            </Text>
             Following
           </Text>
         </Flex>
-        <Flex alignItems={'center'} gap={4}>
-          <Text fontSize={'sm'} fontWeight={'bold'}>userName</Text>
+        <Flex alignItems={"center"} gap={4}>
+          <Text fontSize={"sm"} fontWeight={"bold"}>
+            {userProfile.fullname}
+          </Text>
         </Flex>
         <Flex>
-          <Text fontSize={'sm'}>This is my IG profile</Text>
+          <Text fontSize={"sm"}>{userProfile.bio}</Text>
         </Flex>
       </VStack>
     </Flex>

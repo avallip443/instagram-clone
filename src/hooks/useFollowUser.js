@@ -39,12 +39,14 @@ const useFollowUser = (userID) => {
           following: authUser.following.filter((uid) => uid !== userID),
         });
 
-        setUserProfile({
-          ...userProfile,
-          followers: userProfile.followers.filter(
-            (uid) => uid !== authUser.uid
-          ),
-        });
+        if (userProfile) {
+          setUserProfile({
+            ...userProfile,
+            followers: userProfile.followers.filter(
+              (uid) => uid !== authUser.uid
+            ),
+          });
+        }
 
         localStorage.setItem(
           "user-info",
@@ -62,10 +64,12 @@ const useFollowUser = (userID) => {
           following: [...authUser.following, userID],
         });
 
-        setUserProfile({
-          ...userProfile,
-          followers: [...userProfile.followers, authUser.uid],
-        });
+        if (userProfile) {
+          setUserProfile({
+            ...userProfile,
+            followers: [...userProfile.followers, authUser.uid],
+          });
+        }
 
         localStorage.setItem(
           "user-info",

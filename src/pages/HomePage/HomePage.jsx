@@ -15,7 +15,7 @@ const HomePage = () => {
           maxW={"300px"}
           mr={20}
         >
-          <SuggestedUsers />
+          {/*<SuggestedUsers /> */}
         </Box>
       </Flex>
     </Container>

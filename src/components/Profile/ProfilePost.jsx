@@ -1,8 +1,11 @@
+import useAuthStore from "../../store/authStore";
 import Comment from "../Comment/Comment";
-import PostFooter from '../FeedPosts/PostFooter'
+import PostFooter from "../FeedPosts/PostFooter";
+import useUserProfileStore from "../../store/userProfileStore";
+import { AiFillHeart } from "react-icons/ai";
 import {
   Avatar,
-  Box,
+  Button,
   Divider,
   Flex,
   GridItem,
@@ -16,15 +19,17 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-const ProfilePost = ({ image }) => {
+const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const userProfile = useUserProfileStore((state) => state.userProfile);
+  const authUser = useAuthStore((state) => state.user);
 
   return (
     <>
+      {/* post image */}
       <GridItem
         position={"relative"}
         border={"1px solid whiteAlpha.300"}
@@ -50,21 +55,21 @@ const ProfilePost = ({ image }) => {
             <Flex>
               <AiFillHeart size={20} />
               <Text fontWeight={"bold"} ml={2}>
-                7
+                {post.likes.length}
               </Text>
             </Flex>
 
             <Flex>
               <FaComment size={20} />
               <Text fontWeight={"bold"} ml={2}>
-                7
+                {post.comments.length}
               </Text>
             </Flex>
           </Flex>
         </Flex>
 
         <Image
-          src={image}
+          src={post.imageURL}
           alt="profile post"
           w={"100%"}
           h={"100%"}
@@ -72,11 +77,12 @@ const ProfilePost = ({ image }) => {
         />
       </GridItem>
 
+      {/* post pop-up */}
       <Modal
+        size={{ base: "3xl", md: "5xl" }}
+        isCentered={true}
         isOpen={isOpen}
         onClose={onClose}
-        isCentered={true}
-        size={{ base: "3xl", md: "5xl" }}
       >
         <ModalOverlay />
         <ModalContent>
@@ -84,17 +90,21 @@ const ProfilePost = ({ image }) => {
           <ModalBody bg={"black"} pb={5}>
             <Flex
               w={{ base: "90%", sm: "70%", md: "full" }}
+              maxH={"90vh"}
+              minH={"50vh"}
               gap={4}
               mx={"auto"}
             >
-              <Box
+              <Flex
                 flex={1.5}
+                justifyContent={"center"}
+                alignItems={"center"}
                 overflow={"hidden"}
                 border={"1px solid whiteAlpha.300"}
                 borderRadius={4}
               >
-                <Image src={image} alt="profile post" />
-              </Box>
+                <Image src={post.imageURL} alt="profile post" />
+              </Flex>
               <Flex
                 display={{ base: "none", md: "flex" }}
                 flex={1}
@@ -104,49 +114,38 @@ const ProfilePost = ({ image }) => {
                 <Flex justifyContent={"space-between"} alignItems={"center"}>
                   <Flex alignItems={"center"} gap={4}>
                     <Avatar
-                      src="/profilepic.png"
+                      src={userProfile.profilePicURL}
                       name={"test user"}
                       size={"sm"}
                     />
                     <Text fontSize={12} fontWeight={"bold"}>
-                      Test user
+                      {userProfile.username}
                     </Text>
                   </Flex>
-                  <Box
-                    borderRadius={4}
-                    p={1}
-                    _hover={{ bg: "whiteAlpha.300", color: "red.600" }}
-                  >
-                    <MdDelete size={20} cursor={"pointer"} />
-                  </Box>
+
+                  {/* delete */}
+                  {authUser?.uid === userProfile.uid && (
+                    <Button
+                      size={"sm"}
+                      bg={"transparent"}
+                      borderRadius={4}
+                      p={1}
+                      _hover={{ bg: "whiteAlpha.300", color: "red.600" }}
+                    >
+                      <MdDelete size={20} cursor={"pointer"} />
+                    </Button>
+                  )}
                 </Flex>
                 <Divider bg={"gray.500"} my={4} />
+
+                {/* comments */}
                 <VStack
                   w={"full"}
                   maxH={"350px"}
                   alignItems={"start"}
                   overflowY={"auto"}
-                >
-                  <Comment
-                    username="test user"
-                    profilePic="./profilepic.png"
-                    createdAt="1d ago"
-                    text={"sample images"}
-                  />
-                  <Comment
-                    username="test user 2"
-                    profilePic="./profilepic.png"
-                    createdAt="12h ago"
-                    text={"sample"}
-                  />
-                  <Comment
-                    username="test user 3"
-                    profilePic="./profilepic.png"
-                    createdAt="1w ago"
-                    text={"images"}
-                  />
-                </VStack>
-                <Divider bg={'gray.8000'} my={4} />
+                ></VStack>
+                <Divider bg={"gray.8000"} my={4} />
                 <PostFooter isProfilePage={true} />
               </Flex>
             </Flex>

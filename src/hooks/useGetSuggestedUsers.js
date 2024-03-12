@@ -13,7 +13,7 @@ const useGetSuggestedUsers = () => {
   useEffect(() => {
     const getSuggestedUsers = async () => {
       setIsLoading(true);
-
+  
       try {
         const usersRef = collection(firestore, "users");
         const q = query(
@@ -22,14 +22,14 @@ const useGetSuggestedUsers = () => {
           orderBy("uid"),
           limit(3)
         );
-
+  
         const querySnapshot = await getDocs(q);
         const users = [];
-
+  
         querySnapshot.forEach((doc) => {
           users.push({ ...doc.data(), id: doc.id }); // creates document with data and id in array
         });
-
+  
         setSuggestedUsers(users);
       } catch (error) {
         showToast("Error", error.message, "error");
@@ -37,10 +37,12 @@ const useGetSuggestedUsers = () => {
         setIsLoading(false);
       }
     };
+  
     if (authUser) {
       getSuggestedUsers();
     }
   }, [authUser, showToast]);
+  
 
   return { isLoading, suggestedUsers };
 };

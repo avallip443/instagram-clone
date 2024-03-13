@@ -1,3 +1,4 @@
+import Caption from "../Comment/Caption";
 import Comment from "../Comment/Comment";
 import PostFooter from "../FeedPosts/PostFooter";
 import useAuthStore from "../../store/authStore";
@@ -174,13 +175,15 @@ const ProfilePost = ({ post }) => {
                 </Flex>
                 <Divider bg={"gray.500"} my={4} />
 
-                {/* comments */}
                 <VStack
                   w={"full"}
                   maxH={"350px"}
                   alignItems={"start"}
                   overflowY={"auto"}
                 >
+                  {/* caption */}
+                  {post.caption && <Caption post={post} />}
+                  {/* comments */}
                   {post.comments.map((comment) => (
                     <Comment key={comment.id} comment={comment} />
                   ))}

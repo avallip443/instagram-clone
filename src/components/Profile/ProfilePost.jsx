@@ -34,9 +34,7 @@ const ProfilePost = ({ post }) => {
   const userProfile = useUserProfileStore((state) => state.userProfile);
   const authUser = useAuthStore((state) => state.user);
   const deletePost = usePostStore((state) => state.deletePost);
-  const decrementPostCount = useUserProfileStore(
-    (state) => state.deletePost
-  );
+  const decrementPostCount = useUserProfileStore((state) => state.deletePost);
   const showToast = useShowToast();
 
   const handleDeletePost = async () => {
@@ -182,9 +180,13 @@ const ProfilePost = ({ post }) => {
                   maxH={"350px"}
                   alignItems={"start"}
                   overflowY={"auto"}
-                ></VStack>
+                >
+                  {post.comments.map((comment) => (
+                    <Comment key={comment.id} comment={comment} />
+                  ))}
+                </VStack>
                 <Divider bg={"gray.8000"} my={4} />
-                <PostFooter isProfilePage={true} />
+                <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
           </ModalBody>

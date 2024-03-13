@@ -9,7 +9,18 @@ const usePostStore = create((set) => ({
   setPost: (posts) => set({ posts }),
   deletePost: (id) =>
     set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
-  //TODO: add comment
+  addComment: (postID, comment) =>
+    set((state) => ({
+      posts: state.posts.map((post) => {
+        if (post.id === postID) {
+          return {
+            ...post,
+            comments: [...post.comments, comment], // adds comment to the end
+          };
+        }
+        return post;
+      }),
+    })),
 }));
 
 export default usePostStore;

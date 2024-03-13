@@ -1,19 +1,31 @@
-import { Avatar, Flex, Text } from "@chakra-ui/react";
-import React from "react";
+import { timeAgo } from "../../utils/timeAgo";
+import useGetUserProfileByID from "../../hooks/useGetUserProfileByID";
+import { Avatar, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
-const Comment = ({ username, profilePic, createdAt, text }) => {
+const Comment = ({ comment }) => {
+  const { userProfile, isLoading } = useGetUserProfileByID(comment.createdBy);
+
+  if (isLoading) {
+    return <CommentSkeleton />;
+  }
+
   return (
     <Flex gap={4}>
-      <Avatar src={profilePic} name={username} size={"sm"} />
+      <Link to={`/${userProfile.username}`}>
+        <Avatar src={userProfile.profilePicURL} size={"sm"} />
+      </Link>
       <Flex direction={"column"}>
-        <Flex gap={2}>
-          <Text fontSize={12} fontWeight={"bold"}>
-            {username}
-          </Text>
-          <Text fontSize={14}>{text}</Text>
+        <Flex alignItems={"center"} gap={2}>
+          <Link to={`/${userProfile.username}`}>
+            <Text fontSize={12} fontWeight={"bold"}>
+              {userProfile.username}
+            </Text>
+          </Link>
+          <Text fontSize={14}>{comment.comment}</Text>
         </Flex>
         <Text fontSize={12} color={"gray"}>
-          {createdAt}
+          {timeAgo(comment.createdAt)}
         </Text>
       </Flex>
     </Flex>
@@ -21,3 +33,15 @@ const Comment = ({ username, profilePic, createdAt, text }) => {
 };
 
 export default Comment;
+
+const CommentSkeleton = () => {
+  return (
+    <Flex w={"full"} alignItems={"center"} gap={1}>
+      <SkeletonCircle h={10} w="10" />
+      <Flex flexDirection={"column"} gap={1}>
+        <Skeleton height={2} width={100} />
+        <Skeleton height={2} width={50} />
+      </Flex>
+    </Flex>
+  );
+};

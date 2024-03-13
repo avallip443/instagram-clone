@@ -7,7 +7,9 @@ const usePostStore = create((set) => ({
       posts: [post, ...state.posts],
     })),
   setPost: (posts) => set({ posts }),
-  //TODO: delete post, add comment
+  deletePost: (id) =>
+    set((state) => ({ posts: state.posts.filter((post) => post.id !== id) })),
+  //TODO: add comment
 }));
 
 export default usePostStore;

@@ -11,7 +11,13 @@ const useUserProfileStore = create((set) => ({
         posts: [post.id, ...state.userProfile.posts],
       },
     })),
-  // TODO: delete post
+  deletePost: (postID) =>
+    set((state) => ({
+      userProfile: {
+        ...state.userProfile,
+        posts: state.userProfile.posts.filter((id) => id !== postID),
+      },
+    })),
 }));
 
 export default useUserProfileStore;

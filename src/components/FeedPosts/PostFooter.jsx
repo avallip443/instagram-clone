@@ -15,24 +15,14 @@ import {
   UnlikeLogo,
 } from "../../assets/constants";
 import { useRef, useState } from "react";
+import useLikePost from "../../hooks/useLikePost";
 
 const PostFooter = ({ post, username, isProfilePage }) => {
-  const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(1000);
-  const { isCommenting, handlePostComment } = usePostComment();
-  const [comment, setComment] = useState("");
   const authUser = useAuthStore((state) => state.user);
   const commentRef = useRef(null);
-
-  const handleLike = () => {
-    if (liked) {
-      setLiked(false);
-      setLikes(likes - 1);
-    } else {
-      setLiked(true);
-      setLikes(likes + 1);
-    }
-  };
+  const { isCommenting, handlePostComment } = usePostComment();
+  const [comment, setComment] = useState("");
+  const { handleLikePost, isLiked, likes } = useLikePost(post);
 
   const handleSubmitComment = async () => {
     await handlePostComment(post.id, comment);
@@ -42,9 +32,12 @@ const PostFooter = ({ post, username, isProfilePage }) => {
   return (
     <Box mb={10} marginTop={"auto"}>
       <Flex w={"full"} alignItems={"center"} gap={4} mb={2} mt={4} pt={0}>
-        <Box fontSize={18} cursor={"pointer"} onClick={handleLike}>
-          {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
+
+        {/* Like button */}
+        <Box fontSize={18} cursor={"pointer"} onClick={handleLikePost}>
+          {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
         </Box>
+        {/* Comment button */}
         <Box
           fontSize={18}
           cursor={"pointer"}

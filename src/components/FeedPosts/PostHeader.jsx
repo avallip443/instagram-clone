@@ -8,6 +8,7 @@ import {
   SkeletonCircle,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { timeAgo } from '../../utils/timeAgo'
 
 const PostHeader = ({ post, creatorProfile }) => {
   const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(
@@ -43,7 +44,7 @@ const PostHeader = ({ post, creatorProfile }) => {
             <Skeleton w={"200px"} h={"10px"} />
           )}
 
-          <Box color={"gray.500"}>• 1w</Box>
+          <Box color={"gray.500"}>• {timeAgo(post.createdAt)}</Box>
         </Flex>
       </Flex>
       <Box cursor={"pointer"}>

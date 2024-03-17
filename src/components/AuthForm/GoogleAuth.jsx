@@ -8,7 +8,7 @@ import { Flex, Image, Text } from "@chakra-ui/react";
 const GoogleAuth = ({ prefix }) => {
   const [signInWithGoogle, , , error] = useSignInWithGoogle(auth);
   const showToast = useShowToast();
-  const longinUser = useAuthStore((state) => state.login);
+  const loginUser = useAuthStore((state) => state.login);
 
   const handleGoogleAuth = async () => {
     try {

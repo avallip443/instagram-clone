@@ -1,3 +1,4 @@
+import {timeAgo} from "../../utils/timeAgo";
 import useAuthStore from "../../store/authStore";
 import usePostComment from "../../hooks/usePostComment";
 import {
@@ -17,7 +18,7 @@ import {
 import { useRef, useState } from "react";
 import useLikePost from "../../hooks/useLikePost";
 
-const PostFooter = ({ post, username, isProfilePage }) => {
+const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const authUser = useAuthStore((state) => state.user);
   const commentRef = useRef(null);
   const { isCommenting, handlePostComment } = usePostComment();
@@ -32,7 +33,6 @@ const PostFooter = ({ post, username, isProfilePage }) => {
   return (
     <Box mb={10} marginTop={"auto"}>
       <Flex w={"full"} alignItems={"center"} gap={4} mb={2} mt={4} pt={0}>
-
         {/* Like button */}
         <Box fontSize={18} cursor={"pointer"} onClick={handleLikePost}>
           {!isLiked ? <NotificationsLogo /> : <UnlikeLogo />}
@@ -52,17 +52,26 @@ const PostFooter = ({ post, username, isProfilePage }) => {
       <Text fontSize={"sm"} fontWeight={600}>
         {likes} likes
       </Text>
+
+      {isProfilePage && (
+        <Text fontSize={12} color={"gray"}>
+          Posted {timeAgo(post.createdAt)}
+        </Text>
+      )}
+
       {!isProfilePage && (
         <>
           <Text fontSize={"sm"} fontWeight={700}>
-            {username}{" "}
+            {creatorProfile?.username}
             <Text as="span" fontWeight={400}>
-              Very nice test
+              {post.caption}
             </Text>
           </Text>
-          <Text fontSize={"sm"} color={"gray"}>
-            View all 1,000 comments
-          </Text>
+          {post.comments.length > 0 && (
+            <Text fontSize={"sm"} color={"gray"} cursor={"pointer"}>
+              View all {post.comments.length} comments
+            </Text>
+          )}
         </>
       )}
 

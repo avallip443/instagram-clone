@@ -6,7 +6,6 @@ import {
   Flex,
   Skeleton,
   SkeletonCircle,
-  Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 

@@ -36,10 +36,12 @@ const FeedPosts = () => {
         posts.map((post) => <FeedPost key={post.id} post={post} />)}
       {!isLoading && posts.length === 0 && (
         <>
-          <Text textAlign={'center'}  fontSize={"lg"} color={"red.400"}>
+          <Text textAlign={"center"} fontSize={"lg"} color={"red.400"}>
             Looks like you don't have any friends ...
           </Text>
-          <Text textAlign={'center'} color={"red.400"}>Let's go make some!</Text>
+          <Text textAlign={"center"} color={"red.400"}>
+            Let's go make some!
+          </Text>
         </>
       )}
     </Container>

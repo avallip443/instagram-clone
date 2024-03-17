@@ -1,11 +1,11 @@
 import PostHeader from "./PostHeader";
 import PostFooter from "./PostFooter";
-import useGetUserProfileById from "../../hooks/useGetUserProfileById";
+import useGetUserProfileById from "../../hooks/useGetUserProfileByID";
 import { Box, Image } from "@chakra-ui/react";
 
 const FeedPost = ({ post }) => {
   const { userProfile } = useGetUserProfileById(post.createdBy);
-  
+
   return (
     <>
       <PostHeader post={post} creatorProfile={userProfile} />
@@ -18,4 +18,3 @@ const FeedPost = ({ post }) => {
 };
 
 export default FeedPost;
-
